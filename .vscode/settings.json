@@ -1,0 +1,22 @@
+{
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#323208",
+    "titleBar.activeBackground": "#060601",
+    "titleBar.activeForeground": "#e7e7e7",
+    "activityBar.activeBackground": "#323208",
+    "activityBar.activeBorder": "#126e6e",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#126e6e",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "statusBar.background": "#060601",
+    "statusBar.border": "#060601",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#323208",
+    "titleBar.border": "#060601",
+    "titleBar.inactiveBackground": "#06060199",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#060601",
+  "todo-tree.tree.scanMode": "current file",
+}
