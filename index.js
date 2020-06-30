@@ -8,20 +8,16 @@ const BUILDINGS = [
   { shortcut: 'L', name: 'lab', label: 'laboratory', price: 200 }
 ]
 
-const locations = [
-  {
-    name: 'w1',
-    buildingSlots: [
-      { id: 1, building: false },
-      { id: 2, building: false }
-    ]
-  }
+const defaultBuildingSlots = [
+  { id: 1, building: false },
+  { id: 2, building: false }
 ]
 
 program
   .option('-d|--debug', 'output extra debugging')
   .option('-s, --status', 'check status')
   .option('-b, --build [something]', 'build')
+  .option('-r, --research [somethings]', 'research')
   .option('-c, --cultivate', 'cultivate')
 // .option('-c, --cheese [type]', 'add the specified type of cheese')
 
@@ -34,22 +30,25 @@ async function run () {
   const timeSinceLastRun = differenceInSeconds(now, new Date(lastEvent.t))
 
   // Update
+  const buildingSlots = lastEvent.buildingSlots || defaultBuildingSlots
   let power = lastEvent.power || 1
   power += timeSinceLastRun * 0.01
-
   power = Math.floor((power + Number.EPSILON) * 100) / 100
-  state.events.push({ t: new Date().getTime(), power, nodes })
+  state.events.push({ t: new Date().getTime(), power, nodes, buildingSlots })
   saveState(state)
 
+  /* =============================================
+  =                   Section                   =
+  ============================================= */
   if (program.build) {
     if (program.build === true) {
-      return listBuildings()
+      return listBuildables(lastEvent)
     }
     const building = BUILDINGS.find(b =>
       [b.shortcut, b.name, b.label].includes(program.build.toUpperCase())
     )
     if (!building) {
-      return listBuildings()
+      return listBuildables(lastEvent)
     }
     build(building)
   }
@@ -63,8 +62,18 @@ async function run () {
 
 run()
 
-function listBuildings () {
-  for (let b of BUILDINGS) {
+function listBuildables (event) {
+  console.log('\n', chalk.underline('You own:'))
+  for (const s of event.buildingSlots) {
+    if (s.building === false) {
+      console.log('\t', chalk.yellow('<empty building slot>'))
+      continue
+    }
+    console.log('\t', s)
+  }
+
+  console.log('\nYou can build:')
+  for (const b of BUILDINGS) {
     console.log(chalk.yellow(b.shortcut.toUpperCase()), ' - ', b.label)
   }
 }
